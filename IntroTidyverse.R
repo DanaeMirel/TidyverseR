@@ -139,12 +139,40 @@ gapminder %>%
             maxGdpPercap= max(gdpPercap))
 
 # Find median life expectancy and maximum GDP per capita in each continent/year combination
-gapminder %>% 
-  group_by(continent, year) %>% 
-  summarize(medianLifeExp = median(lifeExp), 
+by_year <- gapminder %>%
+  group_by(year) %>%
+  summarize(medianLifeExp = median(lifeExp),
             maxGdpPercap = max(gdpPercap))
 
+# Create a scatter plot showing the change in medianLifeExp over time
+by_year %>%
+  ggplot(aes(x = year, y = medianLifeExp)) +
+  geom_point() +
+  expand_limits(y=0)
 
+# Summarize medianGdpPercap within each continent within each year: by_year_continent
+by_year_continent <- gapminder %>%
+  group_by(year, continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+# Plot the change in medianGdpPercap in each continent over time
+by_year_continent %>%
+  ggplot(aes(x = year, y = medianGdpPercap, color=continent)) +
+  geom_point() +
+  expand_limits(y=0)
+
+# Summarize the median GDP and median life expectancy per continent in 2007
+by_continent_2007 <- gapminder %>%
+  filter(year==2007) %>%
+  group_by(continent) %>%
+  summarize(medianLifeExp = median(lifeExp),
+            medianGdpPercap = median(gdpPercap))
+
+# Use a scatter plot to compare the median GDP and median life expectancy
+by_continent_2007 %>%
+  ggplot(aes(x = medianGdpPercap, y = medianLifeExp,  color=continent)) +
+  geom_point() +
+  expand_limits(y=0)
 
 #---------------------------------#
 #---# Types of visualizations #---#
