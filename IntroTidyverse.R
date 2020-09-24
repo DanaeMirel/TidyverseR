@@ -245,3 +245,15 @@ gapminder_1952 %>%
   scale_x_log10()
 
 #---# boxplot #---#
+
+# Create a boxplot comparing gdpPercap among continents
+gapminder_1952  %>%
+  ggplot(aes(x=continent, y=gdpPercap)) + 
+  geom_boxplot() + 
+  scale_y_log10()
+
+# Add a title to this graph: "Comparing GDP per capita across continents"
+ggplot(gapminder_1952, aes(x = continent, y = gdpPercap)) +
+  geom_boxplot() +
+  scale_y_log10() + 
+  ggtitle('Comparing GDP per capita across continents')
