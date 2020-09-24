@@ -178,3 +178,70 @@ by_continent_2007 %>%
 #---# Types of visualizations #---#
 #---------------------------------#
 
+#---# Line plots #---#
+
+# Summarize the median gdpPercap by year, then save it as by_year
+by_year <- gapminder %>% 
+  group_by(year) %>%
+  summarise(medianGdpPercap=median(gdpPercap))
+
+# Create a line plot showing the change in medianGdpPercap over time
+by_year %>% 
+  ggplot(aes(x = year, y = medianGdpPercap)) +
+  geom_line() +
+  expand_limits(y = 0) 
+
+# Summarize the median gdpPercap by year & continent, save as by_year_continent
+by_year_continent <- gapminder %>% 
+  group_by(year, continent) %>%
+  summarise(medianGdpPercap=median(gdpPercap))
+
+# Create a line plot showing the change in medianGdpPercap by continent over time
+by_year_continent %>% 
+  ggplot(aes(x = year, y = medianGdpPercap, color=continent)) +
+  geom_line() +
+  expand_limits(y = 0)  
+
+#---# bar plots #---# 
+
+# Summarize the median gdpPercap by continent in 1952
+by_continent <- gapminder %>%
+  filter(year==1952) %>%
+  group_by(continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+# Create a bar plot showing medianGdp by continent
+by_continent %>% 
+  ggplot(aes(x=continent, y=medianGdpPercap)) +
+  geom_col()
+
+# Filter for observations in the Oceania continent in 1952
+oceania_1952 <- gapminder %>%
+  filter(continent=='Oceania' & year=='1952') 
+
+# Create a bar plot of gdpPercap by country
+oceania_1952 %>% 
+  ggplot(aes(x=country, y=gdpPercap)) +
+  geom_col()
+
+#---# histograms #---#
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952) %>%
+  mutate(pop_by_mil = pop / 1000000)
+
+# Create a histogram of population (pop_by_mil)
+gapminder_1952 %>% 
+  ggplot(aes(x=pop_by_mil)) + 
+  geom_histogram(bins=50)
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+# Create a histogram of population (pop), with x on a log scale
+gapminder_1952 %>% 
+  ggplot(aes(x=pop)) + 
+  geom_histogram() +
+  scale_x_log10()
+
+#---# boxplot #---#
