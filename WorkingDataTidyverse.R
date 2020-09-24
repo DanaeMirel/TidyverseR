@@ -44,6 +44,42 @@ bakeoff %>%
   skim() %>%  # no argument needed here
   summary()
 
+# View distinct results
+bakeoff %>% 
+  distinct(result)
+
+# Count rows for each result
+bakeoff %>% 
+  count(result)
+
+# Count whether or not star baker
+bakeoff %>% 
+  count(result=='SB')
+
+# Add second count by series
+bakeoff %>% 
+  count(series, episode) %>%
+  count(series)
+
+# Count the number of rows by series and baker
+bakers_by_series <- bakeoff %>% 
+  count(series, baker)
+
+# Print to view
+bakers_by_series
+
+# Count again by series
+bakers_by_series %>% 
+  count(series)
+
+# Count again by baker
+bakers_by_series %>%
+  count(baker, sort=TRUE)
+
+ggplot(bakeoff, aes(x=episode)) + 
+  geom_bar() + 
+  facet_wrap(~series)
+
 #------------------------#
 #---# Tame your data #---#
 #------------------------#
