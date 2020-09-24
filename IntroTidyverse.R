@@ -52,6 +52,34 @@ gapminder %>%
 #---# Data visualization #---#
 #----------------------------#
 
+library(ggplot2)
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+# Change to put pop on the x-axis and gdpPercap on the y-axis
+gapminder_1952 %>% 
+ggplot(aes(x = pop, y = gdpPercap)) +
+  geom_point()
+
+gapminder_1952 %>% 
+  ggplot(aes(x=pop, y=lifeExp)) + 
+  geom_point()
+
+# Change this plot to put the x-axis on a log scale
+gapminder_1952 %>% 
+ggplot(aes(x = pop, y = lifeExp)) +
+  geom_point() + 
+  scale_x_log10()
+
+# Scatter plot comparing pop and gdpPercap, with both axes on a log scale
+gapminder_1952 %>% 
+  ggplot(aes(x=pop, y=gdpPercap)) +
+  geom_point() +
+  scale_x_log10()+ 
+  scale_y_log10()
+
+
 
 
 #----------------------------------#
