@@ -51,7 +51,6 @@ gapminder %>%
 #----------------------------#
 #---# Data visualization #---#
 #----------------------------#
-
 library(ggplot2)
 
 gapminder_1952 <- gapminder %>%
