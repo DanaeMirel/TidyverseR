@@ -21,6 +21,18 @@ gapminder %>%
 gapminder %>% 
   filter(year=='2002'& country=='China')
 
+# Sort in ascending order of lifeExp
+gapminder %>%
+  arrange(lifeExp)
+
+# Sort in descending order of lifeExp
+gapminder %>%
+  arrange(desc(lifeExp))
+
+# Filter for the year 1957, then arrange in descending order of population
+gapminder %>%
+  filter(year=='1957') %>%
+  arrange(desc(pop))
 
 #----------------------------#
 #---# Data visualization #---#
