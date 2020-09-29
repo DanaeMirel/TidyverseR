@@ -119,7 +119,6 @@ desserts <- read_csv("desserts.csv",
                        uk_airdate = col_date(format = "%d %B %Y"),
                        technical = col_number(),                       
                        result = col_factor(levels=NULL)))
-
 # Glimpse to view
 glimpse(desserts)
 
@@ -145,18 +144,90 @@ glimpse(desserts)
 desserts <- desserts %>% 
   mutate(tech_win = recode_factor(technical, `1` = 1,
                                   .default = 0))
-
 # Count to compare values                      
 desserts %>% 
   count(technical == 1, tech_win)
 
 #---# Select variables #---# 
 
+ratings <- read_csv('02.03_messy_ratings.csv')
 
- 
+# Recode channel as factor: bbc (1) or not (0)
+ratings <- ratings %>% 
+  mutate(bbc = recode_factor(channel, 
+                             "Channel 4" = 0,
+                             .default = 1))
+
+# Select to look at variables to plot next
+ratings %>% 
+  select(series, channel, bbc)
+
+# Make a filled bar chart
+ggplot(ratings, aes(x = series, y = bbc, fill = bbc)) +
+  geom_col()
+
+# Move channel to front and drop 7-/28-day episode ratings
+ratings %>% 
+  select(channel, everything(), -ends_with("day"))
+
+#---# Tame variable names #---#
+
+library(janitor)
+
+messy_ratings <- read_csv('02.03_messy_ratings.csv')
+
+# Glimpse to see variable names
+glimpse(messy_ratings)
+
+# Reformat to snake case
+ratings <- messy_ratings %>%  
+  clean_names("lower_camel")
+
+# Glimpse cleaned names
+glimpse(ratings)
+
+# Adapt code to also rename 7-day viewer data
+viewers_7day <- ratings %>% 
+  select(series, viewers_7day_ = ends_with("7day"))
+
+# Glimpse
+glimpse(viewers_7day)
+
+# Adapt code to keep original order
+viewers_7day <- ratings %>% 
+  select(everything(),
+         viewers_7day_ = ends_with("7day"), 
+         -ends_with("28day"))
+
+
+# Glimpse
+glimpse(viewers_7day)
+
 #------------------------#
 #---# Tidy your data #---#
 #------------------------#
+
+ratings <- read_csv('messy_ratings.csv')
+head(ratings)
+
+# Plot of episode 1 viewers by series
+ratings %>% 
+  ggplot(aes(x=series, y=e1)) + geom_col()
+
+# Adapt code to plot episode 2 viewers by series
+ggplot(ratings, aes(x = series, y = e2)) +
+  geom_col()
+
+
+x <- c(5, 1, 3, 2, 2, NA)
+row_number(x)
+
+tidy_ratings <- ratings %>%
+  # Gather and convert episode to factor
+  gather(key = "episode", value = "viewers_7day", -series, 
+         factor_key = TRUE, na.rm = TRUE) %>% 
+  # Sort in ascending order by series and episode
+  arrange(series, episode)
 
 #-----------------------------#
 #---# Transform your data #---#
